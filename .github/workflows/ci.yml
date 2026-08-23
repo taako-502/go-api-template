@@ -6,6 +6,46 @@ on:
 permissions:
   contents: read
 jobs:
+  consistency:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+      - name: Verify downloaded modules
+        run: make verify
+      - name: Run go fix and generate OpenAPI
+        run: make check
+      - name: Check generated changes are committed
+        run: |
+          if [[ -n "$(git status --porcelain)" ]]; then
+            echo "Generated or rewritten files are not committed. Run 'make check' and commit the changes."
+            git --no-pager status --short
+            git --no-pager diff
+            exit 1
+          fi
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+      - name: Run golangci-lint
+        run: make lint
+
+  vulnerability-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+      - name: Run govulncheck
+        run: make vuln
+
   test:
     runs-on: ubuntu-latest
     steps:
@@ -13,10 +53,6 @@ jobs:
       - uses: actions/setup-go@v7
         with:
           go-version-file: go.mod
-          cache: false
       - run: go mod download
-      - run: go vet ./...
       - run: go test -race -coverprofile=coverage.out ./...
       - run: go build ./cmd/...
-      - run: go run ./cmd/openapi -output /tmp/openapi.json
-      - run: go run golang.org/x/vuln/cmd/govulncheck@latest ./...

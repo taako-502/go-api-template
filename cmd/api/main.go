@@ -30,7 +30,11 @@ func main() {
 				logger.Error("debug server", "error", err)
 			}
 		}()
-		defer debug.Close()
+		defer func() {
+			if err := debug.Close(); err != nil {
+				logger.Error("close debug server", "error", err)
+			}
+		}()
 	}
 	httpServer := &http.Server{Addr: cfg.Address, Handler: app.NewHandler(cfg, logger), ReadHeaderTimeout: cfg.ReadHeaderTimeout, IdleTimeout: 60 * time.Second, MaxHeaderBytes: 1 << 20, MaxHeaderValueCount: 100}
 	if err := server.Run(ctx, logger, httpServer, cfg.ShutdownTimeout); err != nil {

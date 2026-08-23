@@ -19,7 +19,11 @@ func TestTaskFlow(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer response.Body.Close()
+	defer func() {
+		if err := response.Body.Close(); err != nil {
+			t.Errorf("close create response body: %v", err)
+		}
+	}()
 	if response.StatusCode != http.StatusCreated {
 		t.Fatalf("status=%d", response.StatusCode)
 	}
@@ -37,7 +41,11 @@ func TestTaskFlow(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer get.Body.Close()
+	defer func() {
+		if err := get.Body.Close(); err != nil {
+			t.Errorf("close get response body: %v", err)
+		}
+	}()
 	if get.StatusCode != http.StatusOK {
 		t.Fatalf("status=%d", get.StatusCode)
 	}
