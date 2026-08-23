@@ -4,15 +4,15 @@ import (
 	"context"
 	"errors"
 	"github.com/danielgtaylor/huma/v2"
-	"github.com/taako-502/go-api-template/internal/application/taskservice"
 	"github.com/taako-502/go-api-template/internal/domain/task"
+	"github.com/taako-502/go-api-template/internal/usecase/task_usecase"
 	"time"
 	"uuid"
 )
 
-type TaskHandler struct{ service taskservice.Service }
+type TaskHandler struct{ service task_usecase.Service }
 
-func NewTaskHandler(service taskservice.Service) TaskHandler { return TaskHandler{service: service} }
+func NewTaskHandler(service task_usecase.Service) TaskHandler { return TaskHandler{service: service} }
 
 type taskBody struct {
 	ID        string    `json:"id" format:"uuid"`

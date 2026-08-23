@@ -5,7 +5,7 @@ type Page[T any] struct {
 	Total int
 }
 
-// Map uses Go 1.27 generic methods for fully typed DTO conversion.
+// Map はページング情報を維持したまま、要素を別の型へ変換する。
 func (p Page[T]) Map[U any](convert func(T) U) Page[U] {
 	items := make([]U, len(p.Items))
 	for i, item := range p.Items {

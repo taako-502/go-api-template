@@ -1,11 +1,12 @@
-package taskservice
+package task_usecase
 
 import (
 	"context"
-	"github.com/taako-502/go-api-template/internal/application/page"
-	"github.com/taako-502/go-api-template/internal/domain/task"
 	"time"
 	"uuid"
+
+	"github.com/taako-502/go-api-template/internal/domain/task"
+	"github.com/taako-502/go-api-template/internal/usecase/page"
 )
 
 type Service struct {
@@ -13,7 +14,10 @@ type Service struct {
 	now        func() time.Time
 }
 
-func New(repository task.Repository) Service { return Service{repository: repository, now: time.Now} }
+func New(repository task.Repository) Service {
+	return Service{repository: repository, now: time.Now}
+}
+
 func (s Service) Create(ctx context.Context, title string) (task.Task, error) {
 	value, err := task.New(title, s.now())
 	if err != nil {
@@ -24,13 +28,16 @@ func (s Service) Create(ctx context.Context, title string) (task.Task, error) {
 	}
 	return value, nil
 }
+
 func (s Service) List(ctx context.Context) (page.Page[task.Task], error) {
 	items, err := s.repository.List(ctx)
 	return page.Page[task.Task]{Items: items, Total: len(items)}, err
 }
+
 func (s Service) Get(ctx context.Context, id uuid.UUID) (task.Task, error) {
 	return s.repository.Find(ctx, id)
 }
+
 func (s Service) Update(ctx context.Context, id uuid.UUID, title string, done bool) (task.Task, error) {
 	value, err := s.repository.Find(ctx, id)
 	if err != nil {
@@ -44,4 +51,7 @@ func (s Service) Update(ctx context.Context, id uuid.UUID, title string, done bo
 	}
 	return value, nil
 }
-func (s Service) Delete(ctx context.Context, id uuid.UUID) error { return s.repository.Delete(ctx, id) }
+
+func (s Service) Delete(ctx context.Context, id uuid.UUID) error {
+	return s.repository.Delete(ctx, id)
+}

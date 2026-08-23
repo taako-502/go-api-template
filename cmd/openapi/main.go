@@ -6,9 +6,9 @@ import (
 	"flag"
 	"fmt"
 	"github.com/danielgtaylor/huma/v2/adapters/humago"
-	"github.com/taako-502/go-api-template/internal/application/taskservice"
 	"github.com/taako-502/go-api-template/internal/infrastructure/memory"
 	"github.com/taako-502/go-api-template/internal/presentation/httpapi"
+	"github.com/taako-502/go-api-template/internal/usecase/task_usecase"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -19,7 +19,7 @@ func main() {
 	flag.Parse()
 	mux := http.NewServeMux()
 	api := humago.New(mux, httpapi.NewHumaConfig())
-	httpapi.RegisterOpenAPIRoutes(api, httpapi.NewTaskHandler(taskservice.New(memory.NewTaskRepository())))
+	httpapi.RegisterOpenAPIRoutes(api, httpapi.NewTaskHandler(task_usecase.New(memory.NewTaskRepository())))
 	payload, err := jsonv2.Marshal(api.OpenAPI(), jsontext.WithIndent("  "), jsonv2.Deterministic(true))
 	if err != nil {
 		fatal(err)

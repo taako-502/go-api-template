@@ -1,27 +1,22 @@
 # go-api-template
 
-Go 1.27 API server template using [Huma](https://huma.rocks/) on the standard `net/http` router. The layering comes from `nakith-api`; application-specific dependencies were removed.
+[Huma](https://huma.rocks/)と`net/http`を利用した、Go製APIサーバーのテンプレートです。
+`nakith-api`の構成を基に、アプリケーション固有の依存を取り除いています。
 
-## Included
+## 主な機能
 
-- Huma endpoints, validation, Swagger UI, and OpenAPI 3.1 generation
-- Domain / application / infrastructure / presentation separation
-- Replaceable in-memory repository and complete task CRUD example
-- `slog`, request IDs, panic recovery, strict CORS allow-list
-- Health endpoints, graceful shutdown, race-test CI, vet, vulnerability scan
-- Optional loopback-only pprof server with Go 1.27 `goroutineleak`
+- Humaによるルーティング、バリデーション、Swagger UI、OpenAPI生成
+- Domain / Usecase / Infrastructure / Presentationのレイヤー分離
+- 差し替え可能なRepositoryと、タスクCRUDの実装例
+- `slog`による構造化ログ
+- Request ID、panic recovery、CORS
+- Liveness / Readinessエンドポイント
+- Graceful shutdown
+- pprof用の独立したデバッグサーバー
+- Race detector、`go vet`、脆弱性検査を実行するCI
+- Dockerfile、Dependabot設定
 
-## Go 1.27 usage
-
-- Generic methods: typed `Page[T].Map[U]`
-- Standard `uuid` package with sortable UUIDv7 identifiers
-- `encoding/json/v2` for deterministic OpenAPI and tests
-- `http.Server.MaxHeaderValueCount` hardening
-- Runtime goroutine-leak profile through pprof
-
-Experimental SIMD is excluded because it has no API-server use case and would make normal builds experimental.
-
-## Run
+## セットアップ
 
 ```sh
 cp .env.example .env
@@ -33,13 +28,28 @@ make run
 - API: `http://localhost:8080`
 - Swagger UI: `http://localhost:8080/docs`
 - OpenAPI: `http://localhost:8080/openapi.json`
-- Health: `/health/live`, `/health/ready`
-- pprof when enabled: `http://127.0.0.1:6060/debug/pprof/`
+- Liveness: `http://localhost:8080/health/live`
+- Readiness: `http://localhost:8080/health/ready`
+- pprof: `http://127.0.0.1:6060/debug/pprof/`
+
+## コマンド
+
+```sh
+make run
+make test
+make test-race
+make lint
+make vuln
+make openapi
+make build
+```
+
+## API実行例
 
 ```sh
 curl -X POST http://localhost:8080/v1/tasks \
   -H 'Content-Type: application/json' \
-  -d '{"title":"replace the sample feature"}'
+  -d '{"title":"サンプル機能を置き換える"}'
 ```
 
-Read [ARCHITECTURE.md](ARCHITECTURE.md) before replacing the sample feature.
+設計方針とディレクトリ構成は[ARCHITECTURE.md](ARCHITECTURE.md)を参照してください。
