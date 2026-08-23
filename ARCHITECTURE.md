@@ -15,6 +15,9 @@
 ├── internal
 │   ├── app
 │   ├── config
+│   ├── cqrs
+│   │   ├── query
+│   │   └── readmodel
 │   ├── domain
 │   │   └── task
 │   ├── infrastructure
@@ -39,6 +42,10 @@
 - `internal/usecase`
   - アプリケーション固有のユースケースを実装する。
   - 原則としてドメイン層のみに依存する。
+- `internal/cqrs`
+  - `query`には参照処理に特化したクエリとハンドラーを配置する。
+  - `readmodel`には参照処理に最適化した読み取り専用モデルを配置する。
+  - 更新処理と参照処理を分離する必要がある場合に利用する。
 - `internal/infrastructure`
   - Repositoryや外部サービスの具体的な実装を配置する。
   - サンプルではインメモリRepositoryを実装している。
