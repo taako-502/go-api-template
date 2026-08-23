@@ -15,7 +15,7 @@ import (
 )
 
 func main() {
-	output := flag.String("output", "docs/openapi.json", "output path")
+	output := flag.String("output", "docs/api/openapi.json", "output path")
 	flag.Parse()
 	mux := http.NewServeMux()
 	api := humago.New(mux, httpapi.NewHumaConfig())

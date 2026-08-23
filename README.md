@@ -28,6 +28,7 @@ make run
 - API: `http://localhost:8080`
 - Swagger UI: `http://localhost:8080/docs`
 - OpenAPI: `http://localhost:8080/openapi.json`
+- 生成済みOpenAPI: [`docs/api/openapi.json`](docs/api/openapi.json)
 - Liveness: `http://localhost:8080/health/live`
 - Readiness: `http://localhost:8080/health/ready`
 - pprof: `http://127.0.0.1:6060/debug/pprof/`

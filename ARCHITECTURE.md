@@ -11,6 +11,7 @@
 │   ├── api
 │   └── openapi
 ├── docs
+│   └── api
 ├── internal
 │   ├── app
 │   ├── config

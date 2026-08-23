@@ -2,4 +2,3 @@
 .air/
 bin/
 coverage.out
-docs/openapi.json

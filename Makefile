@@ -13,5 +13,5 @@ vuln:
 build:
 	go build -trimpath -ldflags='-s -w' -o bin/api ./cmd/api
 openapi:
-	go run ./cmd/openapi -output docs/openapi.json
+	go run ./cmd/openapi -output docs/api/openapi.json
 check: lint test-race
