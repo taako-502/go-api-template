@@ -19,7 +19,9 @@
 │   │   ├── query
 │   │   └── readmodel
 │   ├── domain
-│   │   └── task
+│   │   ├── entity
+│   │   ├── repository
+│   │   └── vo
 │   ├── infrastructure
 │   │   └── memory
 │   ├── platform
@@ -37,7 +39,9 @@
 ## レイヤーの責務
 
 - `internal/domain`
-  - エンティティ、ドメインエラー、Repositoryインターフェースを定義する。
+  - `entity`には識別子とライフサイクルを持つエンティティを配置する。
+  - `repository`にはRepositoryインターフェースと永続化に関するドメインエラーを配置する。
+  - `vo`には値によって同一性が決まるValue Objectを配置する。
   - Huma、`net/http`、データストアなどの外部実装に依存しない。
 - `internal/usecase`
   - アプリケーション固有のユースケースを実装する。

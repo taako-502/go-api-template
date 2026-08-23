@@ -4,7 +4,9 @@ import (
 	"context"
 	"errors"
 	"github.com/danielgtaylor/huma/v2"
-	"github.com/taako-502/go-api-template/internal/domain/task"
+	"github.com/taako-502/go-api-template/internal/domain/entity"
+	"github.com/taako-502/go-api-template/internal/domain/repository"
+	"github.com/taako-502/go-api-template/internal/domain/vo"
 	"github.com/taako-502/go-api-template/internal/usecase/task_usecase"
 	"time"
 	"uuid"
@@ -82,14 +84,14 @@ func (h TaskHandler) Delete(ctx context.Context, in *taskIDInput) (*emptyOutput,
 	}
 	return &emptyOutput{}, nil
 }
-func toTaskBody(v task.Task) taskBody {
-	return taskBody{ID: v.ID.String(), Title: v.Title, Done: v.Done, CreatedAt: v.CreatedAt, UpdatedAt: v.UpdatedAt}
+func toTaskBody(v entity.Task) taskBody {
+	return taskBody{ID: v.ID.String(), Title: v.Title.String(), Done: v.Done, CreatedAt: v.CreatedAt, UpdatedAt: v.UpdatedAt}
 }
 func mapError(err error) error {
 	switch {
-	case errors.Is(err, task.ErrNotFound):
+	case errors.Is(err, repository.ErrTaskNotFound):
 		return huma.Error404NotFound("task not found")
-	case errors.Is(err, task.ErrInvalidTitle):
+	case errors.Is(err, vo.ErrInvalidTaskTitle):
 		return huma.Error400BadRequest(err.Error())
 	default:
 		return huma.Error500InternalServerError("internal server error")
